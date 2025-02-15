@@ -15,4 +15,7 @@ jobs:
         run: npm install
 
       - name: Run AI Code Review
-        run: curl -X POST https://your-nestjs-api.com/webhook -H "Content-Type: application/json" -d '${{ toJson(github.event) }}'
+        run: |
+          curl -X POST https://b763-120-60-167-20.ngrok-free.app/webhook \
+          -H "Content-Type: application/json" \
+          -d '${{ toJson(github.event) }}'
