@@ -10,7 +10,7 @@ export class WebhookController {
     console.log("Received webhook");
     console.log("Event: ", event);
     console.log("Payload: ", payload);
-    if (event === 'pull_request' && payload.action === 'opened') {
+    if (payload.number && payload.action === 'opened') {
       console.log("Processing pull request");
       await this.githubService.processPullRequest(payload);
     }
