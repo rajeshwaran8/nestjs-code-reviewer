@@ -9,16 +9,19 @@ export class GithubService {
   constructor(private readonly openAIService: OpenAIService) {}
 
   async processPullRequest(payload: any) {
+    console.log("Processing pull request");
     const repo = payload.repository.full_name;
     const prNumber = payload.pull_request.number;
     const files = await this.getChangedFiles(repo, prNumber);
-
+    console.log("Files: ", files);
     for (const file of files) {
       const code = await this.getFileContent(repo, file.filename);
+      console.log("Code: ", code);
       const reviewComments = await this.openAIService.reviewCode(code);
-
+      console.log("Review Comments: ", reviewComments);
       if (reviewComments) {
         await this.commentOnPR(repo, prNumber, file.filename, reviewComments);
+        console.log("Commented on PR");
       }
     }
   }
@@ -36,6 +39,7 @@ export class GithubService {
   }
 
   private async commentOnPR(repo: string, prNumber: number, filename: string, comment: string) {
+    console.log("Commenting on PR");
     const url = `https://api.github.com/repos/${repo}/issues/${prNumber}/comments`;
     await axios.post(url, { body: `Code Review for \`${filename}\`:\n${comment}` }, { headers: this.getAuthHeaders() });
   }
