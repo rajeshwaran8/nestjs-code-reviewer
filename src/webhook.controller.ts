@@ -7,10 +7,11 @@ export class WebhookController {
 
   @Post()
   async handleWebhook(@Headers('X-GitHub-Event') event: string, @Body() payload: any) {
+    console.log("Received webhook");
     if (event === 'pull_request' && payload.action === 'opened') {
+      console.log("Processing pull request");
       await this.githubService.processPullRequest(payload);
     }
     return { message: 'Webhook received' };
   }
 }
-    
